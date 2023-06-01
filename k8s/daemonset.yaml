@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: ip-check
+  labels:
+    project: little-project
+    app: daemonset-app
+    owner: daisuke
+spec:
+  selector:
+    matchLabels:
+      project: little-project
+      app: daemonset-app
+  template:
+    metadata:
+      labels:
+        project: little-project
+        app: daemonset-app
+        owner: daisuke
+    spec:
+      nodeName: minikube
+      containers:
+        - name: ipv4
+          image: daisukebtw/ipv4-page
+          ports:
+            - containerPort: 80
+      # Using Toleration to have access to tainted nodet
+      tolerations:
+        - key: spray
+          operator: Equal
+          value: red
+          effect: NoSchedule

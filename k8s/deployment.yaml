@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: website
+  labels:
+    project: little-project
+    app: deployment-app
+    owner: daisuke
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      project: little-project
+      app: deployment-app
+  template:
+    metadata:
+      labels:
+        project: little-project
+        app: deployment-app
+        owner: daisuke
+    spec:
+      nodeName: minikube
+      containers:
+        - name: website
+          image: daisukebtw/website-image # Used open source HTML page to create this image
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "500Mi"
+            limits:
+              cpu: "400m"
+              memory: "1Gi"
+      # Before using Tolerations taint node using kubectl taint nodes <nodeName> <key>=<value>:<effect>
+      tolerations:
+        - key: spray
+          operator: Equal
+          value: red
+          effect: NoSchedule
